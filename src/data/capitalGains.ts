@@ -3,12 +3,12 @@ import type { CapitalGains } from "../types";
 export const capitalGainsResponse: { capitalGains: CapitalGains } = {
   capitalGains: {
     stcg: {
-      profits: 70200.88,
-      losses: 1548.53
+      profits: 4049.48,
+      losses: 32127.03
     },
     ltcg: {
-      profits: 5020,
-      losses: 3050
+      profits: 0,
+      losses: 0
     }
   }
 };

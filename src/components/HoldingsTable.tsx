@@ -1,5 +1,5 @@
 import type { Holding } from "../types";
-import { formatAmount, formatCurrency, formatSignedCurrency } from "../utils/format";
+import { formatAssetAmount, formatCurrencyCompact, formatCurrencyFull } from "../utils/format";
 
 type HoldingWithId = Holding & { id: string };
 
@@ -10,6 +10,15 @@ type HoldingsTableProps = {
   onToggleAll: (checked: boolean) => void;
   visibleCount: number;
   onToggleViewAll: () => void;
+  shortTermSort: "asc" | "desc";
+  onToggleShortTermSort: () => void;
+};
+
+const displayCompact = (value: number): string => {
+  const abs = Math.abs(value);
+  if (abs >= 1_000_000) return formatCurrencyCompact(value);
+  if (abs >= 1000) return formatCurrencyCompact(value);
+  return formatCurrencyFull(value);
 };
 
 export const HoldingsTable = ({
@@ -18,7 +27,9 @@ export const HoldingsTable = ({
   onToggle,
   onToggleAll,
   visibleCount,
-  onToggleViewAll
+  onToggleViewAll,
+  shortTermSort,
+  onToggleShortTermSort
 }: HoldingsTableProps) => {
   const visibleRows = holdings.slice(0, visibleCount);
   const allVisibleSelected =
@@ -27,19 +38,13 @@ export const HoldingsTable = ({
     visibleRows.some((holding) => selectedIds.has(holding.id)) && !allVisibleSelected;
 
   return (
-    <section className="table-shell">
-      <div className="table-head">
-        <h2>Holdings</h2>
-        <button type="button" className="link-btn" onClick={onToggleViewAll}>
-          {visibleCount < holdings.length ? "View All" : "View Less"}
-        </button>
-      </div>
-
-      <div className="table-scroll">
+    <section className="holdings-card">
+      <h2 className="holdings-title">Holdings</h2>
+      <div className="holdings-table-wrap">
         <table className="holdings-table">
           <thead>
             <tr>
-              <th>
+              <th className="checkbox-cell">
                 <input
                   aria-label="Select all assets"
                   type="checkbox"
@@ -52,10 +57,18 @@ export const HoldingsTable = ({
                 />
               </th>
               <th>Asset</th>
-              <th>Holdings / Avg Buy Price</th>
+              <th>
+                <span>Holdings</span>
+                <small>Avg Buy Price</small>
+              </th>
               <th>Current Price</th>
-              <th>Short-Term Gain</th>
-              <th>Long-Term Gain</th>
+              <th>
+                <button type="button" className="sort-btn" onClick={onToggleShortTermSort}>
+                  <span className={`sort-arrow ${shortTermSort === "asc" ? "is-asc" : "is-desc"}`}>?</span>
+                  <span>Short-Term</span>
+                </button>
+              </th>
+              <th>Long-Term</th>
               <th>Amount to Sell</th>
             </tr>
           </thead>
@@ -65,7 +78,7 @@ export const HoldingsTable = ({
 
               return (
                 <tr key={holding.id} className={checked ? "is-selected" : undefined}>
-                  <td>
+                  <td className="checkbox-cell">
                     <input
                       aria-label={`Select ${holding.coin}`}
                       type="checkbox"
@@ -74,44 +87,56 @@ export const HoldingsTable = ({
                     />
                   </td>
                   <td>
-                    <div className="asset-cell">
-                      <img src={holding.logo} alt={holding.coin} loading="lazy" />
-                      <div>
-                        <strong>{holding.coin}</strong>
-                        <span>{holding.coinName}</span>
+                    <div className="asset-box">
+                      <img src={holding.logo} alt={holding.coinName} />
+                      <div className="asset-copy">
+                        <strong>{holding.coinName}</strong>
+                        <span>{holding.coin}</span>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <div className="stack-text">
-                      <strong>{formatAmount(holding.totalHolding)}</strong>
-                      <span>{formatCurrency(holding.averageBuyPrice)}</span>
-                    </div>
-                  </td>
-                  <td>{formatCurrency(holding.currentPrice)}</td>
-                  <td>
-                    <div className="stack-text">
-                      <strong className={holding.stcg.gain >= 0 ? "gain" : "loss"}>
-                        {formatSignedCurrency(holding.stcg.gain)}
+                    <div className="cell-dual">
+                      <strong>
+                        {formatAssetAmount(holding.totalHolding)} {holding.coin}
                       </strong>
-                      <span>Qty: {formatAmount(holding.stcg.balance)}</span>
+                      <span>
+                        {formatCurrencyFull(holding.averageBuyPrice)}/{holding.coin}
+                      </span>
+                    </div>
+                  </td>
+                  <td>{displayCompact(holding.currentPrice)}</td>
+                  <td>
+                    <div className="cell-dual">
+                      <strong className={holding.stcg.gain < 0 ? "is-loss" : "is-gain"}>
+                        {displayCompact(holding.stcg.gain)}
+                      </strong>
+                      <span>
+                        {formatAssetAmount(holding.stcg.balance)} {holding.coin}
+                      </span>
                     </div>
                   </td>
                   <td>
-                    <div className="stack-text">
-                      <strong className={holding.ltcg.gain >= 0 ? "gain" : "loss"}>
-                        {formatSignedCurrency(holding.ltcg.gain)}
-                      </strong>
-                      <span>Qty: {formatAmount(holding.ltcg.balance)}</span>
+                    <div className="cell-dual">
+                      <strong>{displayCompact(holding.ltcg.gain)}</strong>
+                      <span>
+                        {formatAssetAmount(holding.ltcg.balance)} {holding.coin}
+                      </span>
                     </div>
                   </td>
-                  <td>{checked ? formatAmount(holding.totalHolding) : "-"}</td>
+                  <td>
+                    {checked ? `${formatAssetAmount(holding.totalHolding)} ${holding.coin}` : "-"}
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
+
+      <button type="button" className="view-all-btn" onClick={onToggleViewAll}>
+        {visibleCount < holdings.length ? "View All" : "View Less"}
+      </button>
     </section>
   );
 };

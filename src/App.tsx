@@ -7,7 +7,7 @@ import { calculateHarvestedGains, getRealisedGains } from "./utils/calculations"
 
 type HoldingWithId = Holding & { id: string };
 
-const defaultVisibleRows = 10;
+const defaultVisibleRows = 4;
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -16,6 +16,9 @@ function App() {
   const [holdings, setHoldings] = useState<HoldingWithId[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [visibleCount, setVisibleCount] = useState(defaultVisibleRows);
+  const [shortTermSort, setShortTermSort] = useState<"asc" | "desc">("desc");
+  const [showHow, setShowHow] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
 
   useEffect(() => {
     const run = async () => {
@@ -28,14 +31,15 @@ function App() {
           fetchHoldings()
         ]);
 
-        const sortedHoldings = holdingsData
-          .map((holding, index) => ({ ...holding, id: `${holding.coin}-${index}` }))
-          .sort((a, b) => b.currentPrice - a.currentPrice);
+        const keyedHoldings = holdingsData.map((holding, index) => ({
+          ...holding,
+          id: `${holding.coin}-${index}`
+        }));
 
         setCapitalGains(capitalGainsData);
-        setHoldings(sortedHoldings);
+        setHoldings(keyedHoldings);
       } catch {
-        setError("Something went wrong while loading data. Please try again.");
+        setError("Could not load tax optimisation data.");
       } finally {
         setLoading(false);
       }
@@ -44,9 +48,17 @@ function App() {
     void run();
   }, []);
 
+  const sortedHoldings = useMemo(() => {
+    const copy = [...holdings];
+    copy.sort((a, b) =>
+      shortTermSort === "desc" ? b.stcg.gain - a.stcg.gain : a.stcg.gain - b.stcg.gain
+    );
+    return copy;
+  }, [holdings, shortTermSort]);
+
   const selectedHoldings = useMemo(
-    () => holdings.filter((holding) => selectedIds.has(holding.id)),
-    [holdings, selectedIds]
+    () => sortedHoldings.filter((holding) => selectedIds.has(holding.id)),
+    [sortedHoldings, selectedIds]
   );
 
   const postHarvestingGains = useMemo(() => {
@@ -56,17 +68,14 @@ function App() {
 
   const savings = useMemo(() => {
     if (!capitalGains || !postHarvestingGains) return 0;
-    return Math.max(0, getRealisedGains(capitalGains) - getRealisedGains(postHarvestingGains));
+    return Math.max(0, getRealisedGains(postHarvestingGains) - getRealisedGains(capitalGains));
   }, [capitalGains, postHarvestingGains]);
 
   const handleToggle = (id: string) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   };
@@ -74,73 +83,82 @@ function App() {
   const handleToggleAllVisible = (checked: boolean) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
-      const visibleIds = holdings.slice(0, visibleCount).map((holding) => holding.id);
-
-      if (checked) {
-        visibleIds.forEach((id) => next.add(id));
-      } else {
-        visibleIds.forEach((id) => next.delete(id));
-      }
-
+      const visibleIds = sortedHoldings.slice(0, visibleCount).map((holding) => holding.id);
+      visibleIds.forEach((id) => {
+        if (checked) next.add(id);
+        else next.delete(id);
+      });
       return next;
     });
   };
 
-  const handleToggleViewAll = () => {
-    setVisibleCount((current) =>
-      current < holdings.length ? holdings.length : defaultVisibleRows
-    );
-  };
-
   if (loading) {
-    return (
-      <main className="app-shell">
-        <div className="status-card">Loading your tax dashboard...</div>
-      </main>
-    );
+    return <main className="app-shell"><div className="status-card">Loading Tax Optimisation...</div></main>;
   }
 
   if (error || !capitalGains || !postHarvestingGains) {
-    return (
-      <main className="app-shell">
-        <div className="status-card status-card--error">
-          {error ?? "Unable to load the application."}
-        </div>
-      </main>
-    );
+    return <main className="app-shell"><div className="status-card error">{error ?? "Something went wrong."}</div></main>;
   }
 
   return (
     <main className="app-shell">
-      <header className="page-heading">
-        <p className="eyebrow">KoinX Assignment</p>
-        <h1>Tax Loss Harvesting</h1>
-        <p>Select holdings to simulate harvesting and compare capital gains in real time.</p>
+      <header className="page-header">
+        <h1>Tax Optimisation</h1>
+        <button
+          type="button"
+          className="how-link"
+          onMouseEnter={() => setShowHow(true)}
+          onMouseLeave={() => setShowHow(false)}
+          onFocus={() => setShowHow(true)}
+          onBlur={() => setShowHow(false)}
+        >
+          How it works?
+        </button>
+
+        {showHow && (
+          <div className="how-popover">
+            <p>• See your capital gains for FY 2024-25 in the left card</p>
+            <p>• Check boxes for assets you plan on selling to reduce your tax liability</p>
+            <p>• Instantly see your updated tax liability in the right card</p>
+            <p>
+              <strong>Pro tip:</strong> Experiment with different combinations of your holdings to optimize your tax
+              liability
+            </p>
+          </div>
+        )}
       </header>
 
+      <section className="notes-strip">
+        <button type="button" className="notes-button" onClick={() => setShowNotes((v) => !v)}>
+          <span className="notes-icon">i</span>
+          <span>Important Notes And Disclaimers</span>
+          <span className={`notes-caret ${showNotes ? "open" : ""}`}>?</span>
+        </button>
+        {showNotes && (
+          <div className="notes-panel">
+            This is a simulation to demonstrate tax-loss harvesting and does not constitute financial advice.
+          </div>
+        )}
+      </section>
+
       <section className="cards-grid">
-        <GainsCard
-          title="Pre-Harvesting"
-          subtitle="Current realised gains snapshot"
-          gains={capitalGains}
-          theme="dark"
-        />
-        <GainsCard
-          title="After Harvesting"
-          subtitle="Updates as you select assets"
-          gains={postHarvestingGains}
-          theme="blue"
-          savings={savings}
-        />
+        <GainsCard title="Pre Harvesting" gains={capitalGains} variant="pre" />
+        <GainsCard title="After Harvesting" gains={postHarvestingGains} variant="after" savings={savings} />
       </section>
 
       <HoldingsTable
-        holdings={holdings}
+        holdings={sortedHoldings}
         selectedIds={selectedIds}
         onToggle={handleToggle}
         onToggleAll={handleToggleAllVisible}
         visibleCount={visibleCount}
-        onToggleViewAll={handleToggleViewAll}
+        onToggleViewAll={() =>
+          setVisibleCount((current) => (current < sortedHoldings.length ? sortedHoldings.length : defaultVisibleRows))
+        }
+        shortTermSort={shortTermSort}
+        onToggleShortTermSort={() =>
+          setShortTermSort((current) => (current === "desc" ? "asc" : "desc"))
+        }
       />
     </main>
   );

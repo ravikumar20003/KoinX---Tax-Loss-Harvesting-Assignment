@@ -1,68 +1,60 @@
 import type { CapitalGains } from "../types";
-import { formatCurrency } from "../utils/format";
 import { getNetGain, getRealisedGains } from "../utils/calculations";
+import { formatCurrencyCompact, formatCurrencyFull } from "../utils/format";
 
 type GainsCardProps = {
   title: string;
-  subtitle: string;
   gains: CapitalGains;
-  theme: "dark" | "blue";
+  variant: "pre" | "after";
   savings?: number;
 };
 
-export const GainsCard = ({ title, subtitle, gains, theme, savings }: GainsCardProps) => {
-  const netShortTerm = getNetGain(gains.stcg);
-  const netLongTerm = getNetGain(gains.ltcg);
+const displayValue = (value: number): string => {
+  const abs = Math.abs(value);
+  if (abs >= 1_000_000) return formatCurrencyCompact(value);
+  return formatCurrencyFull(value);
+};
+
+export const GainsCard = ({ title, gains, variant, savings = 0 }: GainsCardProps) => {
+  const shortNet = getNetGain(gains.stcg);
+  const longNet = getNetGain(gains.ltcg);
   const realised = getRealisedGains(gains);
 
   return (
-    <section className={`gains-card gains-card--${theme}`}>
-      <div className="gains-card__head">
+    <section className={`gain-card gain-card--${variant}`}>
+      <div className="gain-card__title-row">
         <h2>{title}</h2>
-        <p>{subtitle}</p>
+        <div className="gain-card__columns">
+          <span>Short-term</span>
+          <span>Long-term</span>
+        </div>
       </div>
 
-      <div className="gains-grid">
-        <article className="gains-block">
-          <h3>Short-term</h3>
-          <div className="gains-line">
-            <span>Profits</span>
-            <strong>{formatCurrency(gains.stcg.profits)}</strong>
-          </div>
-          <div className="gains-line">
-            <span>Losses</span>
-            <strong>{formatCurrency(gains.stcg.losses)}</strong>
-          </div>
-          <div className="gains-line gains-line--net">
-            <span>Net Capital Gains</span>
-            <strong>{formatCurrency(netShortTerm)}</strong>
-          </div>
-        </article>
-
-        <article className="gains-block">
-          <h3>Long-term</h3>
-          <div className="gains-line">
-            <span>Profits</span>
-            <strong>{formatCurrency(gains.ltcg.profits)}</strong>
-          </div>
-          <div className="gains-line">
-            <span>Losses</span>
-            <strong>{formatCurrency(gains.ltcg.losses)}</strong>
-          </div>
-          <div className="gains-line gains-line--net">
-            <span>Net Capital Gains</span>
-            <strong>{formatCurrency(netLongTerm)}</strong>
-          </div>
-        </article>
+      <div className="gain-card__rows">
+        <div className="gain-row">
+          <span>Profits</span>
+          <span>{displayValue(gains.stcg.profits)}</span>
+          <span>{displayValue(gains.ltcg.profits)}</span>
+        </div>
+        <div className="gain-row">
+          <span>Losses</span>
+          <span>{displayValue(gains.stcg.losses)}</span>
+          <span>{displayValue(gains.ltcg.losses)}</span>
+        </div>
+        <div className="gain-row">
+          <span>Net Capital Gains</span>
+          <span>{displayValue(shortNet)}</span>
+          <span>{displayValue(longNet)}</span>
+        </div>
       </div>
 
-      <div className="realised-row">
-        <span>Realised Capital Gains</span>
-        <strong>{formatCurrency(realised)}</strong>
+      <div className="gain-card__footer-value">
+        <strong>{variant === "pre" ? "Realised Capital Gains:" : "Effective Capital Gains:"}</strong>
+        <strong>{displayValue(realised)}</strong>
       </div>
 
-      {typeof savings === "number" && savings > 0 && (
-        <p className="savings-text">You&apos;re going to save {formatCurrency(savings)}</p>
+      {variant === "after" && savings > 0 && (
+        <p className="gain-card__savings">?? Your taxable capital gains are reduced by: {displayValue(savings)}</p>
       )}
     </section>
   );
