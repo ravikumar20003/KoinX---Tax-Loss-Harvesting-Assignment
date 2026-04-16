@@ -1,0 +1,257 @@
+:root {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  color: #0f172a;
+  background: radial-gradient(circle at 0% 0%, #eff6ff, #f8fafc 40%);
+  line-height: 1.4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: #0f172a;
+}
+
+.app-shell {
+  width: min(1200px, 100% - 2rem);
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.page-heading h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.page-heading p {
+  margin: 0.4rem 0 0;
+  color: #334155;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #2563eb;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+
+.gains-card {
+  border-radius: 16px;
+  padding: 1rem;
+  color: #f8fafc;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.gains-card--dark {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+}
+
+.gains-card--blue {
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+}
+
+.gains-card__head h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.gains-card__head p {
+  margin: 0.25rem 0 0;
+  color: #dbeafe;
+  font-size: 0.9rem;
+}
+
+.gains-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.gains-block {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.gains-block h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: #eff6ff;
+}
+
+.gains-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.83rem;
+  margin: 0.3rem 0;
+  color: #dbeafe;
+}
+
+.gains-line strong {
+  color: #ffffff;
+}
+
+.gains-line--net {
+  margin-top: 0.55rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.25);
+}
+
+.realised-row {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 0.6rem;
+}
+
+.savings-text {
+  margin-top: 0.75rem;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  color: #dcfce7;
+  font-weight: 600;
+}
+
+.table-shell {
+  margin-top: 1.2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #dbe5f3;
+  overflow: hidden;
+}
+
+.table-head {
+  padding: 0.95rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.link-btn {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.table-scroll {
+  overflow: auto;
+}
+
+.holdings-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 980px;
+}
+
+.holdings-table th,
+.holdings-table td {
+  text-align: left;
+  padding: 0.72rem 0.75rem;
+  border-bottom: 1px solid #e5eaf3;
+  vertical-align: top;
+}
+
+.holdings-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #475569;
+  background: #f8fafc;
+}
+
+.holdings-table td {
+  font-size: 0.88rem;
+}
+
+.asset-cell {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.asset-cell img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e2e8f0;
+}
+
+.asset-cell strong,
+.stack-text strong {
+  display: block;
+}
+
+.asset-cell span,
+.stack-text span {
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.stack-text {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.is-selected {
+  background: #eff6ff;
+}
+
+.gain {
+  color: #047857;
+}
+
+.loss {
+  color: #b91c1c;
+}
+
+.status-card {
+  margin-top: 2rem;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+.status-card--error {
+  border-color: #fecaca;
+  color: #991b1b;
+  background: #fef2f2;
+}
+
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gains-grid {
+    grid-template-columns: 1fr;
+  }
+}
