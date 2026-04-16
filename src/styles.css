@@ -14,97 +14,99 @@ body {
 }
 
 .app-shell {
-  width: min(1800px, calc(100% - 112px));
+  width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 14px 0 28px;
+  padding: 16px 0 28px;
 }
 
 .page-header {
   position: relative;
   display: flex;
   align-items: baseline;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 12px 18px;
 }
 
 .page-header h1 {
   margin: 0;
-  font-size: 52px;
-  line-height: 1;
+  font-size: clamp(1.8rem, 3.2vw, 2.35rem);
+  line-height: 1.1;
   letter-spacing: -0.02em;
 }
 
 .how-link {
   background: transparent;
   border: 0;
-  color: #4362f6;
+  color: #5f7cff;
   text-decoration: underline;
-  font-size: 42px;
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
   cursor: pointer;
   padding: 0;
 }
 
 .how-popover {
   position: absolute;
-  top: 72px;
-  left: 170px;
-  width: 610px;
+  top: 52px;
+  left: 140px;
+  width: min(480px, calc(100vw - 48px));
   background: #f3f4f6;
   color: #111827;
-  border-radius: 12px;
-  padding: 18px 24px;
+  border-radius: 10px;
+  padding: 12px 14px;
   z-index: 20;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 .how-popover::before {
   content: "";
   position: absolute;
-  top: -9px;
-  left: 210px;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid #f3f4f6;
+  top: -8px;
+  left: 36px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #f3f4f6;
 }
 
 .how-popover p {
-  margin: 0 0 8px;
-  font-size: 38px;
-  line-height: 1.24;
+  margin: 0 0 6px;
+  font-size: 0.96rem;
+  line-height: 1.35;
 }
 
 .how-popover p:last-child {
-  margin-top: 16px;
+  margin-top: 8px;
   margin-bottom: 0;
 }
 
 .notes-strip {
-  margin-top: 16px;
+  margin-top: 14px;
 }
 
 .notes-button {
   width: 100%;
-  height: 72px;
-  border-radius: 16px;
+  min-height: 50px;
+  border-radius: 12px;
   border: 1px solid #2b4af5;
   background: #172554;
   color: #e5e7eb;
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 0 20px;
-  font-size: 41px;
+  gap: 10px;
+  padding: 10px 14px;
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
   cursor: pointer;
 }
 
 .notes-icon {
-  width: 34px;
-  height: 34px;
+  width: 22px;
+  height: 22px;
   border-radius: 999px;
   border: 1px solid #5f7cff;
   color: #5f7cff;
   display: grid;
   place-items: center;
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .notes-caret {
@@ -118,25 +120,25 @@ body {
 
 .notes-panel {
   margin-top: 8px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #0f172a;
   border: 1px solid #1f2937;
-  padding: 14px 20px;
+  padding: 12px 14px;
   color: #94a3b8;
-  font-size: 18px;
+  font-size: 0.92rem;
 }
 
 .cards-grid {
-  margin-top: 16px;
+  margin-top: 14px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .gain-card {
-  border-radius: 14px;
-  padding: 24px 24px 20px;
-  min-height: 424px;
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 265px;
 }
 
 .gain-card--pre {
@@ -151,40 +153,42 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: end;
+  gap: 10px;
 }
 
 .gain-card h2 {
   margin: 0;
-  font-size: 53px;
+  font-size: clamp(1.35rem, 2.1vw, 1.75rem);
 }
 
 .gain-card__columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 100px;
-  font-size: 45px;
+  gap: 28px;
+  font-size: clamp(0.9rem, 1.3vw, 1.05rem);
   color: #d1d5db;
 }
 
 .gain-card__rows {
-  margin-top: 24px;
+  margin-top: 12px;
 }
 
 .gain-row {
   display: grid;
-  grid-template-columns: 1fr 220px 220px;
-  gap: 34px;
+  grid-template-columns: 1fr 120px 120px;
+  gap: 16px;
   align-items: center;
-  margin-bottom: 18px;
-  font-size: 47px;
+  margin-bottom: 8px;
+  font-size: clamp(0.92rem, 1.35vw, 1.06rem);
 }
 
 .gain-card__footer-value {
-  margin-top: 42px;
+  margin-top: 16px;
   display: flex;
   align-items: center;
-  gap: 24px;
-  font-size: 54px;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: clamp(1rem, 1.7vw, 1.28rem);
 }
 
 .gain-card__footer-value strong {
@@ -192,25 +196,25 @@ body {
 }
 
 .gain-card__savings {
-  margin: 14px 0 0;
-  font-size: 42px;
+  margin: 10px 0 0;
+  font-size: clamp(0.88rem, 1.35vw, 1rem);
   color: #dbeafe;
 }
 
 .holdings-card {
-  margin-top: 16px;
-  border-radius: 14px;
+  margin-top: 14px;
+  border-radius: 12px;
   background: #111827;
-  padding: 22px 24px 10px;
+  padding: 14px 14px 10px;
 }
 
 .holdings-title {
   margin: 0;
-  font-size: 55px;
+  font-size: clamp(1.45rem, 2.5vw, 1.75rem);
 }
 
 .holdings-table-wrap {
-  margin-top: 14px;
+  margin-top: 10px;
   border-radius: 10px;
   overflow: auto;
 }
@@ -218,18 +222,18 @@ body {
 .holdings-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1450px;
+  min-width: 900px;
 }
 
 .holdings-table th,
 .holdings-table td {
   border-bottom: 1px solid #1f2937;
   text-align: left;
-  padding: 15px 18px;
+  padding: 10px 12px;
 }
 
 .holdings-table th {
-  font-size: 47px;
+  font-size: 1rem;
   color: #e5e7eb;
   font-weight: 500;
   background: #030712;
@@ -237,12 +241,13 @@ body {
 
 .holdings-table th small {
   display: block;
-  font-size: 35px;
+  font-size: 0.82rem;
   color: #9ca3af;
+  margin-top: 2px;
 }
 
 .holdings-table td {
-  font-size: 48px;
+  font-size: 1rem;
   color: #f3f4f6;
 }
 
@@ -251,8 +256,8 @@ body {
 }
 
 input[type="checkbox"] {
-  width: 26px;
-  height: 26px;
+  width: 18px;
+  height: 18px;
   accent-color: #3b82f6;
   cursor: pointer;
 }
@@ -264,31 +269,30 @@ input[type="checkbox"] {
   font-size: inherit;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   padding: 0;
   cursor: pointer;
 }
 
 .sort-arrow {
   display: inline-block;
-  font-size: 22px;
-  transform: translateY(-2px);
+  font-size: 12px;
 }
 
 .sort-arrow.is-asc {
-  transform: rotate(180deg) translateY(2px);
+  transform: rotate(180deg);
 }
 
 .asset-box {
   display: flex;
   align-items: center;
-  gap: 12px;
-  max-width: 360px;
+  gap: 10px;
+  max-width: 250px;
 }
 
 .asset-box img {
-  width: 44px;
-  height: 44px;
+  width: 28px;
+  height: 28px;
   border-radius: 999px;
   object-fit: cover;
 }
@@ -298,12 +302,12 @@ input[type="checkbox"] {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 250px;
+  max-width: 180px;
 }
 
 .asset-copy span {
   color: #9ca3af;
-  font-size: 40px;
+  font-size: 0.82rem;
 }
 
 .cell-dual strong {
@@ -312,8 +316,9 @@ input[type="checkbox"] {
 
 .cell-dual span {
   display: block;
-  font-size: 39px;
+  font-size: 0.8rem;
   color: #9ca3af;
+  margin-top: 1px;
 }
 
 .is-gain {
@@ -333,7 +338,7 @@ input[type="checkbox"] {
   border: 0;
   background: transparent;
   color: #5f7cff;
-  font-size: 20px;
+  font-size: 0.88rem;
   cursor: pointer;
   padding: 0;
 }
@@ -344,7 +349,7 @@ input[type="checkbox"] {
   border: 1px solid #1f2937;
   border-radius: 12px;
   padding: 14px;
-  font-size: 18px;
+  font-size: 1rem;
 }
 
 .status-card.error {
@@ -352,40 +357,7 @@ input[type="checkbox"] {
   color: #fecaca;
 }
 
-@media (max-width: 1280px) {
-  .app-shell {
-    width: calc(100% - 24px);
-  }
-
-  .page-header h1 {
-    font-size: 34px;
-  }
-
-  .how-link {
-    font-size: 26px;
-  }
-
-  .how-popover {
-    width: min(600px, calc(100% - 24px));
-    left: 0;
-    top: 56px;
-  }
-
-  .how-popover p {
-    font-size: 22px;
-  }
-
-  .notes-button {
-    height: 54px;
-    font-size: 24px;
-  }
-
-  .notes-icon {
-    width: 24px;
-    height: 24px;
-    font-size: 15px;
-  }
-
+@media (max-width: 1024px) {
   .cards-grid {
     grid-template-columns: 1fr;
   }
@@ -394,38 +366,80 @@ input[type="checkbox"] {
     min-height: auto;
   }
 
-  .gain-card h2 {
-    font-size: 42px;
+  .gain-row {
+    grid-template-columns: 1fr 105px 105px;
+    gap: 12px;
   }
 
   .gain-card__columns {
-    font-size: 29px;
-    gap: 44px;
+    gap: 20px;
+  }
+
+  .how-popover {
+    left: 0;
+    top: 56px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    width: calc(100% - 20px);
+    padding-top: 12px;
+  }
+
+  .page-header {
+    gap: 8px 14px;
+  }
+
+  .how-popover {
+    width: min(420px, calc(100vw - 24px));
+  }
+
+  .gain-card {
+    padding: 14px;
   }
 
   .gain-row {
-    grid-template-columns: 1fr 130px 130px;
-    font-size: 28px;
-    gap: 18px;
+    grid-template-columns: 1fr 92px 92px;
+    font-size: 0.88rem;
+    gap: 10px;
   }
 
   .gain-card__footer-value {
-    font-size: 34px;
+    font-size: 1rem;
   }
 
-  .gain-card__savings {
-    font-size: 24px;
+  .holdings-table {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-shell {
+    width: calc(100% - 14px);
   }
 
-  .holdings-title,
-  .holdings-table th,
-  .holdings-table td {
-    font-size: 24px;
+  .gain-card {
+    padding: 12px;
   }
 
-  .asset-copy span,
-  .cell-dual span,
-  .holdings-table th small {
-    font-size: 18px;
+  .gain-row {
+    grid-template-columns: 1fr 80px 80px;
+    font-size: 0.82rem;
+    gap: 8px;
+  }
+
+  .gain-card__columns {
+    font-size: 0.82rem;
+    gap: 12px;
+  }
+
+  .notes-button {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
+  .holdings-title {
+    font-size: 1.3rem;
   }
 }
